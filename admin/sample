@@ -1,0 +1,23 @@
+<?php
+include('includes/config.php');
+
+$date_from=$_POST['date_from'];
+$date_to=$_POST['date_to'];
+$vehicle=$_POST['vehicle'];
+
+$availabilitysql="SELECT * FROM tblbookings WHERE VehicleBooked=:vehicle  AND ((DateFrom>=:date_from AND DateTo<=:date_to) OR (DateFrom<=:date_from AND DateTo>=:date_to) OR (DateFrom<=:date_from AND DateTo>=:date_to) OR (DateFrom<=:date_from  AND DateTo>=:date_to))";
+    $availability = $dbh->prepare($availabilitysql);
+    $availability->bindParam(':vehicle',$vehicle,PDO::PARAM_STR);
+    $availability->bindParam(':date_from',$date_from,PDO::PARAM_STR);
+    $availability->bindParam(':date_to',$date_to,PDO::PARAM_STR);
+    $availability->execute();
+    $avail= $availability->fetch();
+ if($avail){
+  	
+ return true;
+  }
+ else{
+
+ return false;
+ }
+    ?>
